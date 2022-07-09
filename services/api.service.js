@@ -51,31 +51,6 @@ module.exports = {
 
 				},
 
-				/** 
-				 * Before call hook. You can check the request.
-				 * @param {Context} ctx 
-				 * @param {Object} route 
-				 * @param {IncomingRequest} req 
-				 * @param {ServerResponse} res 
-				 * @param {Object} data
-				 * 
-				onBeforeCall(ctx, route, req, res) {
-					// Set request headers to context meta
-					ctx.meta.userAgent = req.headers["user-agent"];
-				}, */
-
-				/**
-				 * After call hook. You can modify the data.
-				 * @param {Context} ctx 
-				 * @param {Object} route 
-				 * @param {IncomingRequest} req 
-				 * @param {ServerResponse} res 
-				 * @param {Object} data
-				onAfterCall(ctx, route, req, res, data) {
-					// Async function which return with Promise
-					return doSomething(ctx, res, data);
-				}, */
-
 				// Calling options. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Calling-options
 				callingOptions: {},
 
@@ -113,65 +88,5 @@ module.exports = {
 			// Options to `server-static` module
 			options: {}
 		}
-	},
-
-	methods: {
-
-		/**
-		 * Authenticate the request. It check the `Authorization` token value in the request header.
-		 * Check the token value & resolve the user by the token.
-		 * The resolved user will be available in `ctx.meta.user`
-		 *
-		 * PLEASE NOTE, IT'S JUST AN EXAMPLE IMPLEMENTATION. DO NOT USE IN PRODUCTION!
-		 *
-		 * @param {Context} ctx
-		 * @param {Object} route
-		 * @param {IncomingRequest} req
-		 * @returns {Promise}
-		 */
-		async authenticate(ctx, route, req) {
-			// Read the token from header
-			const auth = req.headers["authorization"];
-
-			if (auth && auth.startsWith("Bearer")) {
-				const token = auth.slice(7);
-
-				// Check the token. Tip: call a service which verify the token. E.g. `accounts.resolveToken`
-				if (token == "123456") {
-					// Returns the resolved user. It will be set to the `ctx.meta.user`
-					return { id: 1, name: "John Doe" };
-
-				} else {
-					// Invalid token
-					throw new ApiGateway.Errors.UnAuthorizedError(ApiGateway.Errors.ERR_INVALID_TOKEN);
-				}
-
-			} else {
-				// No token. Throw an error or do nothing if anonymous access is allowed.
-				// throw new E.UnAuthorizedError(E.ERR_NO_TOKEN);
-				return null;
-			}
-		},
-
-		/**
-		 * Authorize the request. Check that the authenticated user has right to access the resource.
-		 *
-		 * PLEASE NOTE, IT'S JUST AN EXAMPLE IMPLEMENTATION. DO NOT USE IN PRODUCTION!
-		 *
-		 * @param {Context} ctx
-		 * @param {Object} route
-		 * @param {IncomingRequest} req
-		 * @returns {Promise}
-		 */
-		async authorize(ctx, route, req) {
-			// Get the authenticated user.
-			const user = ctx.meta.user;
-
-			// It check the `auth` property in action schema.
-			if (req.$action.auth == "required" && !user) {
-				throw new ApiGateway.Errors.UnAuthorizedError("NO_RIGHTS");
-			}
-		}
-
 	}
 };

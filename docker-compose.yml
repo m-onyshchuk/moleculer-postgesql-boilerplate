@@ -1,49 +1,25 @@
-version: "3.3"
+version: '3.5'
+
+# mpb - moleculer-postgesql-boilerplate
+networks:
+  mpb_net:
 
 services:
-
-  api:
-    build:
-      context: .
-    image: moleculer-postgesql-boilerplate
-    env_file: docker-compose.env
-    environment:
-      SERVICES: api
-      PORT: 3000
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.api-gw.rule=PathPrefix(`/`)"
-      - "traefik.http.services.api-gw.loadbalancer.server.port=3000"
+  mpb_db:
+    image: postgres:latest
+    shm_size: '2g'
+    container_name: mpb_db
+    restart: unless-stopped
+#    env_file: docker-compose.env
     networks:
-      - internal
-
-  greeter:
-    build:
-      context: .
-    image: moleculer-postgesql-boilerplate
-    env_file: docker-compose.env
-    environment:
-      SERVICES: greeter
-    networks:
-      - internal
-
-  traefik:
-    image: traefik:v2.1
-    command:
-      - "--api.insecure=true" # Don't do that in production!
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
+      - mpb_net
     ports:
-      - 3000:80
-      - 3001:8080
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    networks:
-      - internal
-      - default
-
-networks:
-  internal:
-
-volumes:
-  data:
+      - ${DB_PORT}:5432
+#   for big tests only        
+#    volumes:
+#      - ./mpb_data:/var/lib/postgresql/data
+    environment:
+#      - TZ=<wanted>
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}

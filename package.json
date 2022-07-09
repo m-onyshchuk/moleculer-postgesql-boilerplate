@@ -7,11 +7,10 @@
     "start": "moleculer-runner",
     "cli": "moleculer connect ",
     "ci": "jest --watch",
-    "test": "jest --coverage",
     "lint": "eslint services",
-    "dc:up": "docker-compose up --build -d",
-    "dc:logs": "docker-compose logs -f",
-    "dc:down": "docker-compose down"
+    "dc:up": "docker-compose --env-file=docker-compose.env up -d",
+    "dc:logs": "docker-compose  --env-file=docker-compose.env logs",
+    "dc:dn": "docker-compose --env-file=docker-compose.env down -v"
   },
   "keywords": [
     "microservices",
@@ -24,7 +23,8 @@
   },
   "dependencies": {
     "moleculer": "^0.14.16",
-    "moleculer-web": "^0.10.2"
+    "moleculer-web": "^0.10.2",
+    "pg": "^8.7.3"
   },
   "engines": {
     "node": ">= 12.x.x"
