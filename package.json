@@ -7,14 +7,17 @@
     "start": "moleculer-runner",
     "cli": "moleculer connect ",
     "ci": "jest --watch",
-    "lint": "eslint services",
     "dc:up": "docker-compose --env-file=docker-compose.env up -d",
     "dc:logs": "docker-compose  --env-file=docker-compose.env logs",
     "dc:dn": "docker-compose --env-file=docker-compose.env down -v"
   },
   "keywords": [
     "microservices",
-    "moleculer"
+    "moleculer",
+    "PostgreSQL",
+    "boilerplate",
+    "example",
+    "sample"
   ],
   "author": "",
   "devDependencies": {
@@ -22,6 +25,7 @@
     "moleculer-repl": "^0.6.6"
   },
   "dependencies": {
+    "glob": "^8.0.3",
     "moleculer": "^0.14.16",
     "moleculer-web": "^0.10.2",
     "pg": "^8.7.3"
