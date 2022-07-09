@@ -1,7 +1,9 @@
 "use strict";
-const {Pool} = require("pg");
-const glob = require("glob");
+
+const fs = require("fs");
 const path = require("path");
+const glob = require("glob");
+const {Pool} = require("pg");
 
 /**
  * @typedef {import("moleculer").Context} Context Moleculer"s Context
@@ -58,6 +60,9 @@ module.exports = {
       this.logger.info("PostgreSQL connection pool is ready ...");
     },
 
+    /**
+     * Find *.sql files with migrations in ../migrations folder
+     */
     async migrationsFind() {
       let files = await new Promise((resolve, reject) => {
         const pattern = path.join(__dirname, "../migrations/*.sql");
@@ -75,10 +80,21 @@ module.exports = {
       return files;
     },
 
+    /**
+     * Check all migrations for each run
+     */
     async migrationsRun() {
       try {
         const files = await this.migrationsFind();
-        let xxx = 12;
+        if (files) {
+          const client = await this.pg.connect();
+          for (let filePath of files) {
+            const sql = await fs.promises.readFile(filePath, 'utf8');
+            await client.query(sql);
+          }
+          client.release();
+        }
+        this.logger.info("Migrations checked ...");
       } catch (error) {
         this.logger.error(`migrationsRun:: ${error.message}`);
       }
