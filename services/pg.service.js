@@ -53,6 +53,7 @@ module.exports = {
 				query_timeout: 60000,     // 1 minute
 			};
 			this.pg = new Pool(cfg);
+			this.logger.info("PostgreSQL connected ...");
 		}
 	},
 
