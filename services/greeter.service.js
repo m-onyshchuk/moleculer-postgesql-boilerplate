@@ -45,13 +45,13 @@ module.exports = {
 		 * @param {String} name - User name
 		 */
 		welcome: {
-			rest: "/welcome",
+			rest: "/welcome/:name",
 			params: {
 				name: "string"
 			},
 			/** @param {Context} ctx  */
 			async handler(ctx) {
-				return `Welcome, ${ctx.params.name}`;
+				return {welcome: ctx.params.name};
 			}
 		}
 	},
