@@ -26,23 +26,29 @@ module.exports = {
      */
     query: {
       params: {
-        sql: "string"
-      },
-      async handler() {
-        // ctx.params.sql
-        return "Hello Moleculer";
-      }
-    },
-
-    test: {
-      params: {
-        a: "number"
+        sql: "string",
+        values: "array"
       },
       async handler(ctx) {
-        // ctx.params.sql
-        return Number(ctx.params.a) + 1;
+        let client = null;
+        let result = {
+          data: [],
+          error: null
+        };
+        try {
+          client = await this.pg.connect();
+          const sets = await client.query(ctx.params.sql, ctx.params.values);
+          result.data = sets.rows;
+        } catch (error) {
+          result.error = error.message;
+          this.logger.error(`pg.query: ${error.message}`);
+        }
+        if (client) {
+          client.release();
+        }
+        return result;
       }
-    },
+    }
   },
 
   methods: {

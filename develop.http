@@ -1,12 +1,11 @@
-###
-GET http://localhost:3000/api/greeter/hello
+### Test 1
+GET http://localhost:3000/api/test/run?search=nature
 Accept: application/json
 
-###
-GET http://localhost:3000/api/greeter/welcome?name=xxx
+### Test 2
+GET http://localhost:3000/api/test/run?search=art
 Accept: application/json
 
-###
-GET http://localhost:3000/api/greeter/welcome/xxx
+### Test 3
+GET http://localhost:3000/api/test/run?search=something
 Accept: application/json
-
